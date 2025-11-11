@@ -1,0 +1,1363 @@
+Implement basic functions of Statistics and Maths using Numpy and Scipy required for 
+ML.  
+a) Usage of methods such as floor(), ceil(), sqrt(), isqrt(), gcd() etc. 
+1. math.floor(x): 
+Returns the floor of x, which is the largest integer less than or equal to x. 
+import math 
+print(math.floor(3.7))  # Output: 3 
+print(math.floor(-2.3)) # Output: -3 
+2. math.ceil(x): 
+Returns the ceiling of x, which is the smallest integer greater than or equal to x. 
+import math 
+print(math.ceil(3.2))   # Output: 4 
+print(math.ceil(-2.7))  # Output: -2 
+3. math.sqrt(x): 
+Returns the square root of x as a float. x must be non-negative. 
+import math 
+print(math.sqrt(25))    # Output: 5.0 
+print(math.sqrt(2))     # Output: 1.4142135623730951 
+4. math.isqrt(n): 
+Returns the integer square root of n, which is the largest integer a such that a*a <= 
+n. This function is available from Python 3.8 onwards. 
+import math 
+print(math.isqrt(25))   # Output: 5 
+print(math.isqrt(26))   # Output: 5 
+print(math.isqrt(0))    # Output: 0 
+5. math.gcd(a, b):  
+Returns the greatest common divisor (GCD) of the two integers a and b. 
+import math 
+print(math.gcd(48, 18)) # Output: 6 
+print(math.gcd(17, 5))  # Output: 1 
+Check other functions from the Math library 
+
+
+
+
+
+
+
+#a
+import math
+
+# 1️ floor(x) → largest integer ≤ x
+print("math.floor(3.7) =", math.floor(3.7))
+print("math.floor(-2.3) =", math.floor(-2.3))
+
+# 2️ ceil(x) → smallest integer ≥ x
+print("math.ceil(3.2) =", math.ceil(3.2))
+print("math.ceil(-2.7) =", math.ceil(-2.7))
+
+# 3️ sqrt(x) → square root (float)
+print("math.sqrt(25) =", math.sqrt(25))
+print("math.sqrt(2) =", math.sqrt(2))
+
+#  isqrt(n) → integer square root (largest integer a such that a*a ≤ n)
+print("math.isqrt(25) =", math.isqrt(25))
+print("math.isqrt(26) =", math.isqrt(26))
+print("math.isqrt(0) =", math.isqrt(0))
+
+# 5gcd(a, b) → greatest common divisor
+print("math.gcd(48, 18) =", math.gcd(48, 18))
+print("math.gcd(17, 5) =", math.gcd(17, 5))
+
+
+
+
+
+b) Usage of attributes of array such as ndim, shape, size, methods such as sum(), 
+mean(), sort(), sin() etc. 
+
+#b)Usage of attributes of array such as ndim, shape, size, methods such as sum(), mean(), sort(), sin() etc.
+import numpy as np
+
+# Create a NumPy array
+arr = np.array([1, 2, 3, 4, 5])
+
+# Attributes
+print("Array =", arr)
+print("Dimensions (ndim) =", arr.ndim)
+print("Shape =", arr.shape)
+print("Size =", arr.size)
+
+# Methods
+print("Sum =", arr.sum())
+print("Mean =", arr.mean())
+print("Sorted =", np.sort(arr))
+print("Sine values =", np.sin(arr))
+
+
+
+
+
+c) Usage of methods such as det(), eig() etc. 
+In Python, the det() and eig() functions, used for calculating the determinant and 
+eigenvalues/eigenvectors of a matrix, are found within the numpy.linalg module. 
+numpy.linalg.det() 
+This function computes the determinant of a square matrix. 
+import numpy as np 
+# Create a square matrix 
+matrix = np.array([[1, 2], 
+[3, 4]]) 
+# Calculate the determinant 
+determinant = np.linalg.det(matrix) 
+print(f"The determinant of the matrix is: {determinant}") 
+numpy.linalg.eig() 
+This function computes the eigenvalues and right eigenvectors of a square matrix. It 
+returns a tuple containing two arrays: the first array holds the eigenvalues, and the 
+second array holds the corresponding eigenvectors (as columns). 
+import numpy as np 
+# Create a square matrix 
+matrix = np.array([[2, 2], 
+[1, 3]]) 
+# Calculate eigenvalues and eigenvectors 
+eigenvalues, eigenvectors = np.linalg.eig(matrix) 
+print(f"Eigenvalues: {eigenvalues}") 
+print(f"Eigenvectors:\n{eigenvectors}") 
+
+
+
+#c)Usage of methods such as det(), eig() etc.
+import numpy as np
+
+# Create a square matrix
+matrix = np.array([[2, 2],
+                   [1, 3]])
+
+# 1️ Determinant
+det = np.linalg.det(matrix)
+print("Determinant =", det)
+
+# 2️ Eigenvalues & Eigenvectors
+eig_vals, eig_vecs = np.linalg.eig(matrix)
+print("Eigenvalues =", eig_vals)
+print("Eigenvectors:\n", eig_vecs)
+
+
+
+
+
+d) Consider a list datatype(1D) then reshape it into2D, 3D matrix using numpy 
+To reshape a 1D Python list into 2D and 3D matrices using NumPy, the list must first 
+be converted into a NumPy array. The reshape() method can then be applied to this 
+array, specifying the desired dimensions. 
+import numpy as np 
+# Create a 1D Python list 
+my_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] 
+# Convert the list to a NumPy array 
+np_array = np.array(my_list) 
+print("Original 1D NumPy Array:") 
+print(np_array) 
+print("Shape:", np_array.shape) 
+print("\n") 
+# Reshape into a 2D matrix (e.g., 3 rows, 4 columns) 
+# The total number of elements must remain consistent (3 * 4 = 12) 
+matrix_2d = np_array.reshape(3, 4) 
+print("Reshaped 2D Matrix:") 
+print(matrix_2d) 
+print("Shape:", matrix_2d.shape) 
+print("\n") 
+# Reshape into a 3D matrix (e.g., 2 layers, 2 rows, 3 columns) 
+# The total number of elements must remain consistent (2 * 2 * 3 = 12) 
+matrix_3d = np_array.reshape(2, 2, 3) 
+print("Reshaped 3D Matrix:") 
+print(matrix_3d) 
+print("Shape:", matrix_3d.shape) 
+Convert to NumPy Array: np.array(my_list) converts the Python list into a NumPy 
+ndarray.  
+This allows the use of NumPy's array manipulation functions like reshape(). 
+Reshape to 2D: np_array.reshape(3, 4) transforms the 1D array into a 2D array with 3 
+rows and 4 columns. The product of the new dimensions (3 \* 4 = 12) must equal the 
+total number of elements in the original 1D array. 
+
+Reshape to 3D: np_array.reshape(2, 2, 3) transforms the 1D array into a 3D array with 
+2 "layers" (or depth), 2 rows, and 3 columns. Again, the product of the new 
+dimensions (2 \* 2 \* 3 = 12) must match the total number of elements. 
+The shape attribute is used to confirm the dimensions of the resulting arrays. 
+
+
+#(d) Reshaping a 1D List into 2D and 3D using NumPy
+import numpy as np
+
+# 1️ Create 1D Python list and convert to NumPy array
+my_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+arr = np.array(my_list)
+print("1D Array:", arr)
+print("Shape:", arr.shape)
+
+# 2️ Reshape into 2D (3 rows × 4 columns)
+arr_2d = arr.reshape(3, 4)
+print("\n2D Matrix:\n", arr_2d)
+print("Shape:", arr_2d.shape)
+
+# 3️ Reshape into 3D (2 layers × 2 rows × 3 cols)
+arr_3d = arr.reshape(2, 2, 3)
+print("\n3D Matrix:\n", arr_3d)
+print("Shape:", arr_3d.shape)
+
+
+
+e) Numpy.random.Generator and matrices using numpy 
+The numpy.random.Generator is the preferred way to generate random numbers in 
+NumPy, offering a more robust and flexible approach compared to older functions 
+like numpy.random.rand() or numpy.random.randint(). It allows for better control 
+over the random number generation process, including the ability to specify a seed for 
+reproducibility and to choose from various distributions. 
+Using numpy.random.Generator: 
+Create a Generator instance. 
+import numpy as np 
+rng = np.random.default_rng(seed=42) # Optional: set a seed for reproducibility 
+Generate random numbers: The Generator object provides methods for generating 
+random numbers from different distributions. 
+Uniform distribution (floats between 0 and 1): 
+random_floats = rng.random(size=(2, 3)) # Generates a 2x3 matrix of floats 
+Integers within a range. 
+random_integers = rng.integers(low=1, high=11, size=(3, 3))  
+# Generates a 3x3 matrix of integers between 1 and 10 
+Normal (Gaussian) distribution. 
+normal_values = rng.normal(loc=0, scale=1, size=(2, 2)) 
+# Generates a 2x2 matrix from a standard normal distribution 
+Matrices using NumPy: 
+NumPy arrays are the fundamental data structure for representing matrices. Creating a 
+matrix. 
+matrix_a = np.array([[1, 2, 3], 
+[4, 5, 6], 
+[7, 8, 9]]) 
+Matrix operations: NumPy provides efficient functions for various matrix operations. 
+Matrix multiplication: Use np.dot() or the @ operator (for Python 3.5+). 
+matrix_b = np.array([[9, 8, 7], 
+[6, 5, 4], 
+[3, 2, 1]]) 
+product = np.dot(matrix_a, matrix_b) 
+# or 
+product_at = matrix_a @ matrix_b 
+Transpose. 
+transpose_a = matrix_a.T 
+Element-wise operations: Standard arithmetic operators perform element-wise 
+operations. 
+sum_matrices = matrix_a + matrix_b 
+
+
+#(e) NumPy Random Generator and Matrices
+import numpy as np
+
+# 1️ Create a random Generator (seed for reproducibility)
+rng = np.random.default_rng(seed=42)
+
+# Generate random numbers
+print("Random Floats (2x3):\n", rng.random((2, 3)))
+print("\nRandom Integers (1–10, 3x3):\n", rng.integers(1, 11, (3, 3)))
+print("\nNormal Distribution (2x2):\n", rng.normal(0, 1, (2, 2)))
+
+# 2️Create matrices
+matrix_a = np.array([[1, 2, 3],
+                     [4, 5, 6],
+                     [7, 8, 9]])
+matrix_b = np.array([[9, 8, 7],
+                     [6, 5, 4],
+                     [3, 2, 1]])
+
+# Matrix operations
+product = np.dot(matrix_a, matrix_b)      # Matrix multiplication
+transpose_a = matrix_a.T                  # Transpose
+sum_matrices = matrix_a + matrix_b        # Element-wise sum
+
+print("\nMatrix A:\n", matrix_a)
+print("\nMatrix B:\n", matrix_b)
+print("\nProduct (A·B):\n", product)
+print("\nTranspose of A:\n", transpose_a)
+print("\nElement-wise Sum:\n", sum_matrices)
+
+
+
+f) Find the determinant of a matrix using scipy 
+To find the determinant of a matrix using SciPy, the scipy.linalg.det() function is 
+employed. This function calculates the determinant of a square matrix. 
+import numpy as np 
+from scipy import linalg 
+# Define a square matrix 
+matrix_A = np.array([[3, 1, 4], 
+[1, 5, 9], 
+[2, 6, 5]]) 
+# Calculate the determinant 
+determinant_A = linalg.det(matrix_A) 
+print("Matrix A:") 
+print(matrix_A) 
+print("\nDeterminant of Matrix A:", determinant_A) 
+
+#fFind the Determinant of a Matrix using SciPy
+import numpy as np
+from scipy import linalg
+
+# Define a square matrix
+matrix_A = np.array([[3, 1, 4],
+                     [1, 5, 9],
+                     [2, 6, 5]])
+
+# Calculate the determinant
+determinant_A = linalg.det(matrix_A)
+
+# Display results
+print("Matrix A:\n", matrix_A)
+print("\nDeterminant of Matrix A:", determinant_A)
+
+
+
+
+g) Find eigen value and eigen vector of a matrix using scipy 
+Eigenvalues and eigenvectors of a matrix can be found using the eig function from the 
+scipy.linalg module. 
+Steps: 
+1. Import necessary libraries: Import numpy to create the matrix and scipy.linalg.eig 
+to calculate eigenvalues and eigenvectors. 
+2. Define the matrix: Create a square matrix using numpy.array(). 
+3. Calculate eigenvalues and eigenvectors: Call the eig() function, passing the matrix 
+as an argument. This function returns two arrays: the first contains the 
+eigenvalues, and the second contains the eigenvectors. Each column of the 
+eigenvector array corresponds to an eigenvector associated with the eigenvalue at 
+the same index in the eigenvalue array. 
+Example: 
+import numpy as np 
+from scipy.linalg import eig 
+# Define a square matrix 
+A = np.array([[2, 1], 
+[1, 2]]) 
+# Calculate eigenvalues and eigenvectors 
+eigenvalues, eigenvectors = eig(A) 
+# Print the results 
+print("Eigenvalues:", eigenvalues) 
+print("Eigenvectors:\n", eigenvectors) 
+
+
+#(g) Find Eigenvalues and Eigenvectors using SciPy
+import numpy as np
+from scipy.linalg import eig
+
+# Define a square matrix
+A = np.array([[2, 1],
+              [1, 2]])
+
+# Calculate eigenvalues and eigenvectors
+eigenvalues, eigenvectors = eig(A)
+
+# Display results
+print("Matrix A:\n", A)
+print("\nEigenvalues:", eigenvalues)
+print("\nEigenvectors:\n", eigenvectors)
+
+
+
+
+
+
+Implementation of Python Libraries for ML application such as Pandas and 
+Matplotlib. 
+a) Create a Series using pandas and display 
+b) Access the index and the values of our Series 
+c) Compare an array using Numpy with a series using pandas 
+d) Define Series objects with individual indices 
+e) Access single value of a series 
+f) Load datasets in a Data frame variable using pandas 
+
+# a) Create a Series using pandas and display
+import pandas as pd
+
+# Creating a simple pandas Series
+data = pd.Series([10, 20, 30, 40, 50])
+print(data)
+
+
+# b) Access the index and the values of our Series
+# Accessing index
+print("Index:", data.index)
+
+# Accessing values
+print("Values:", data.values)
+
+
+# c) Compare an array using Numpy with a series using pandas
+import numpy as np
+
+# Creating a Numpy array
+arr = np.array([10, 20, 30, 40, 50])
+
+# Comparing with pandas Series
+print("Numpy array == Series:", arr == data.values)
+
+
+# d) Define Series objects with individual indices
+# Custom index Series
+custom_series = pd.Series([100, 200, 300], index=['a', 'b', 'c'])
+print(custom_series)
+
+# e) Access single value of a series
+
+# Access by index position using iloc
+print("Value at position 1:", custom_series.iloc[1])
+
+# Access by label
+print("Value at label 'b':", custom_series['b'])
+
+
+
+# f) Load datasets in a DataFrame variable using pandas
+# Loading dataset (example CSV)
+
+df = pd.DataFrame({
+    'Name': ['Alice', 'Bob', 'Charlie'],
+    'Age': [25, 30, 35],
+    'City': ['Pune', 'Mumbai', 'Delhi']
+})
+print(df)
+# Usage of different methods in Matplotlib
+import matplotlib.pyplot as plt
+
+# Simple line plot
+plt.plot([1, 2, 3, 4], [10, 20, 25, 30])
+plt.title("Line Plot Example")
+plt.xlabel("X-axis")
+plt.ylabel("Y-axis")
+plt.show()
+
+# Simple bar plot
+plt.bar(['A', 'B', 'C'], [5, 10, 15])
+plt.title("Bar Plot Example")
+plt.show()
+
+# Simple scatter plot
+plt.scatter([1, 2, 3], [4, 5, 6])
+plt.title("Scatter Plot Example")
+plt.show()
+
+
+
+
+ass3
+# i. Dataset Creation using Pandas
+import pandas as pd
+import numpy as np
+# 1. From a Dictionary
+data_dict = {
+    'Name': ['Alice', 'Bob', 'Charlie'],
+    'Age': [25, 30, 22],
+    'City': ['New York', 'London', 'Paris']
+}
+df_dict = pd.DataFrame(data_dict)
+print("From Dictionary:\n", df_dict, "\n")
+
+# 2. From a List of Lists
+data_list = [
+    ['Alice', 25, 'New York'],
+    ['Bob', 30, 'London'],
+    ['Charlie', 22, 'Paris']
+]
+df_list = pd.DataFrame(data_list, columns=['Name', 'Age', 'City'])
+print("From List of Lists:\n", df_list, "\n")
+
+# 3. From a List of Dictionaries
+data_list_dict = [
+    {'Name': 'Alice', 'Age': 25, 'City': 'New York'},
+    {'Name': 'Bob', 'Age': 30, 'City': 'London'},
+    {'Name': 'Charlie', 'Age': 22, 'City': 'Paris'}
+]
+df_list_dict = pd.DataFrame(data_list_dict)
+print("From List of Dictionaries:\n", df_list_dict, "\n")
+
+# 4. From External Files (CSV / Excel)
+# Note: Replace 'data.csv' and 'data.xlsx' with your actual file paths
+
+# From CSV
+# df_csv = pd.read_csv('data.csv')
+# print("From CSV File:\n", df_csv.head(), "\n")
+
+# From Excel
+# df_excel = pd.read_excel('data.xlsx')
+# print("From Excel File:\n", df_excel.head(), "\n")
+
+# 5. From a NumPy Array
+data_np = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+df_np = pd.DataFrame(data_np, columns=['ColA', 'ColB', 'ColC'])
+print("From NumPy Array:\n", df_np, "\n")
+
+
+
+
+ii. Loading CSV dataset files using Pandas  
+import pandas as pd 
+df = pd.read_csv('/content/drive/MyDrive/your_folder/your_file.csv') 
+
+
+import pandas as pd
+
+# Load CSV file into a DataFrame
+# Note: Use raw string r'' or double backslashes \\ to avoid errors
+df = pd.read_csv(r"D:\Machine larning\aaa.csv")
+
+# Display first 5 rows
+print("Loaded CSV Dataset:\n", df.head())
+
+
+iii. Loading datasets using sklearn 
+from sklearn.datasets import load_iris, load_digits, load_diabetes 
+# Load the Iris dataset 
+iris = load_iris() 
+X_iris, y_iris = iris.data, iris.target 
+print(X_iris) 
+# Load the Digits dataset 
+digits = load_digits() 
+X_digits, y_digits = digits.data, digits.target 
+# Load the Diabetes dataset 
+diabetes = load_diabetes() 
+X_diabetes, y_diabetes = diabetes.data, diabetes.target 
+iv. Loading data sets into Google Colab 
+from google.colab import files 
+uploaded = files.upload() 
+
+
+
+
+# iii. Loading datasets using sklearn
+
+from sklearn.datasets import load_iris, load_digits, load_diabetes
+
+# 1. Load the Iris dataset
+iris = load_iris()
+X_iris, y_iris = iris.data, iris.target
+print("Iris Dataset Features:\n", X_iris[:5])  # Show first 5 rows
+print("Iris Dataset Target:\n", y_iris[:5], "\n")  # Show first 5 labels
+
+# 2. Load the Digits dataset
+digits = load_digits()
+X_digits, y_digits = digits.data, digits.target
+print("Digits Dataset Features:\n", X_digits[:5])
+print("Digits Dataset Target:\n", y_digits[:5], "\n")
+
+# 3. Load the Diabetes dataset
+diabetes = load_diabetes()
+X_diabetes, y_diabetes = diabetes.data, diabetes.target
+print("Diabetes Dataset Features:\n", X_diabetes[:5])
+print("Diabetes Dataset Target:\n", y_diabetes[:5])
+
+
+
+
+
+# b) Compute Mean, Median, Mode, Variance, Standard Deviation
+
+import pandas as pd
+from scipy import stats
+
+# Sample dataset
+data = {'Scores': [85, 90, 78, 92, 88, 76, 95, 89, 84, 91]}
+df = pd.DataFrame(data)
+
+# Display the dataset
+print("Dataset:\n", df, "\n")
+
+# Mean
+mean_value = df['Scores'].mean()
+print("Mean:", mean_value)
+
+# Median
+median_value = df['Scores'].median()
+print("Median:", median_value)
+
+# Mode (updated for latest SciPy)
+mode_value = stats.mode(df['Scores'], keepdims=True).mode[0]
+print("Mode:", mode_value)
+
+# Variance
+variance_value = df['Scores'].var()
+print("Variance:", variance_value)
+
+# Standard Deviation
+std_dev = df['Scores'].std()
+print("Standard Deviation:", std_dev)
+
+
+
+c) Demonstrate various data pre-processing techniques for a given dataset. Write a 
+python program to compute 
+i. 
+Reshaping the data 
+ii. Filtering the data 
+iii. Merging the data 
+iv. Handling the missing values in datasets 
+v.  Feature Normalization: Min-max normalization, Scalar Normalization etc.
+
+
+
+# c) Demonstrate various data pre-processing techniques
+
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+
+# Sample dataset
+data1 = {
+    'ID': [1, 2, 3, 4],
+    'Age': [25, 30, np.nan, 22],
+    'Salary': [50000, 60000, 55000, 45000]
+}
+
+data2 = {
+    'ID': [3, 4, 5, 6],
+    'Department': ['HR', 'IT', 'Finance', 'Marketing']
+}
+
+df1 = pd.DataFrame(data1)
+df2 = pd.DataFrame(data2)
+
+print("Original Dataset 1:\n", df1, "\n")
+print("Original Dataset 2:\n", df2, "\n")
+
+# i. Reshaping the data (example: transpose)
+reshaped_df = df1.T
+print("Reshaped DataFrame (Transpose):\n", reshaped_df, "\n")
+
+# ii. Filtering the data (example: Age > 25)
+filtered_df = df1[df1['Age'] > 25]
+print("Filtered Data (Age > 25):\n", filtered_df, "\n")
+
+# iii. Merging the data (on ID)
+merged_df = pd.merge(df1, df2, on='ID', how='outer')
+print("Merged DataFrame:\n", merged_df, "\n")
+
+# iv. Handling missing values (example: fill missing Age with mean)
+merged_df['Age'].fillna(merged_df['Age'].mean(), inplace=True)
+print("After Handling Missing Values:\n", merged_df, "\n")
+
+# v. Feature Normalization
+# Min-Max Normalization
+scaler = MinMaxScaler()
+merged_df[['Age', 'Salary']] = scaler.fit_transform(merged_df[['Age', 'Salary']])
+print("After Min-Max Normalization:\n", merged_df, "\n")
+
+# Standard (Z-score) Normalization
+scaler_std = StandardScaler()
+merged_df[['Age', 'Salary']] = scaler_std.fit_transform(merged_df[['Age', 'Salary']])
+print("After Standard (Z-score) Normalization:\n", merged_df)
+
+
+
+
+
+
+a) Design and implement a neural network that acts as a AND classifier for binary input 
+
+# a) AND classifier neural network (fast version)
+import numpy as np
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+
+# Input and output
+X_and = np.array([[0,0],[0,1],[1,0],[1,1]])
+y_and = np.array([[0],[0],[0],[1]])
+
+# Simple neural network
+model_and = Sequential()
+model_and.add(Dense(1, input_dim=2, activation='sigmoid'))
+model_and.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+# Train for fewer epochs (10–50 is enough)
+model_and.fit(X_and, y_and, epochs=20, verbose=1)
+
+# Predictions
+preds = model_and.predict(X_and)
+print("\nAND Gate Predictions (rounded):")
+print(np.round(preds))
+
+
+
+b) Design and implement a neural network that acts as a OR classifier for binary input 
+
+
+
+# b) Design and implement a neural network that acts as an OR classifier for binary input
+# The network should take 2 binary inputs and output 1 if at least one input is 1, else 0
+
+
+import numpy as np
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+
+# Input and output for OR gate
+X_or = np.array([[0,0],[0,1],[1,0],[1,1]])
+y_or = np.array([[0],[1],[1],[1]])
+
+# Simple neural network
+model_or = Sequential()
+model_or.add(Dense(1, input_dim=2, activation='sigmoid'))
+model_or.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+# Train for few epochs
+model_or.fit(X_or, y_or, epochs=20, verbose=1)
+
+# Predict outputs
+preds = model_or.predict(X_or)
+print("\nOR Gate Predictions (rounded):")
+print(np.round(preds))
+
+c) Design and implement a neural network that acts as a NAND classifier for binary input 
+
+
+# c) Design and implement a neural network that acts as a NAND classifier for binary input
+# The network should output 0 only if both inputs are 1, else 1
+
+import numpy as np
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+
+# Input and output for NAND gate
+X_nand = np.array([[0,0],[0,1],[1,0],[1,1]])
+y_nand = np.array([[1],[1],[1],[0]])
+
+# Simple neural network
+model_nand = Sequential()
+model_nand.add(Dense(1, input_dim=2, activation='sigmoid'))
+model_nand.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+# Train for few epochs
+model_nand.fit(X_nand, y_nand, epochs=20, verbose=1)
+
+# Predict outputs
+preds = model_nand.predict(X_nand)
+print("\nNAND Gate Predictions (rounded):")
+print(np.round(preds))
+
+
+
+
+
+d) Design and implement a neural network that acts as a XOR classifier for binary input, 
+Comment on the inability of this NN to classify the i/p data 
+
+# d)Design and implement a neural network that acts as a XOR classifier for binary input, Comment on the inability of this NN to classify the i/p data
+# d) XOR classifier neural network
+# XOR outputs 1 if inputs are different, 0 if they are the same
+# Single-layer NN cannot solve XOR because XOR is not linearly separable
+# We need at least one hidden layer
+
+import numpy as np
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+
+# Input and output for XOR gate
+X_xor = np.array([[0,0],[0,1],[1,0],[1,1]])
+y_xor = np.array([[0],[1],[1],[0]])
+
+# Neural network with 1 hidden layer
+model_xor = Sequential()
+model_xor.add(Dense(2, input_dim=2, activation='relu'))  # Hidden layer
+model_xor.add(Dense(1, activation='sigmoid'))            # Output layer
+model_xor.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+# Train the model
+model_xor.fit(X_xor, y_xor, epochs=50, verbose=1)
+
+# Predict outputs
+preds = model_xor.predict(X_xor)
+print("\nXOR Gate Predictions (rounded):")
+print(np.round(preds))
+
+
+
+
+e) Design and implement a sequential, dense neural network that acts as a classifier for 
+the Iris dataset, tune your neural network with different hyperparameter values for 
+learning rate, architecture and epochs 
+
+#e)Design and implement a sequential, dense neural network that acts as a classifier for the Iris dataset, tune your neural network with different hyperparameter values for learning rate, architecture and epochs
+# e) Iris Dataset Classifier
+# Design and implement a sequential, dense neural network
+# Tune learning rate, architecture, and epochs
+
+import numpy as np
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.utils import to_categorical
+
+# Load Iris dataset
+iris = load_iris()
+X = iris.data
+y = to_categorical(iris.target)  # One-hot encode target
+
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Hyperparameters
+learning_rate = 0.01
+epochs = 100
+hidden_neurons = 10
+
+# Create neural network
+model_iris = Sequential()
+model_iris.add(Dense(hidden_neurons, input_dim=4, activation='relu'))  # Hidden layer
+model_iris.add(Dense(3, activation='softmax'))                         # Output layer for 3 classes
+
+# Compile model
+optimizer = Adam(learning_rate=learning_rate)
+model_iris.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
+
+# Train model
+model_iris.fit(X_train, y_train, epochs=epochs, verbose=1)
+
+# Evaluate model
+loss, accuracy = model_iris.evaluate(X_test, y_test, verbose=0)
+print("\nIris Dataset Accuracy:", accuracy)
+
+# Predict first 5 samples
+preds = model_iris.predict(X_test[:5])
+print("\nFirst 5 Predictions (probabilities):\n", preds)
+print("Predicted classes:", np.argmax(preds, axis=1))
+
+
+
+f) Design and implement a sequential, dense neural network that acts as a classifier for 
+the diabetes dataset provided to you in class, tune your neural network with different 
+hyperparameter values for learning rate, architecture and epochs. 
+#f)Design and implement a sequential, dense neural network that acts as a classifier for the diabetes dataset provided to you in class, tune your neural network with different hyperparameter values for learning rate, architecture and epochs
+# f) Diabetes Dataset Classifier
+# Design and implement a sequential, dense neural network
+# Tune learning rate, architecture, and epochs
+
+import numpy as np
+from sklearn.datasets import load_diabetes
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.optimizers import Adam
+
+# Load Diabetes dataset
+diabetes = load_diabetes()
+X = diabetes.data
+y = diabetes.target  # Regression target
+
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Hyperparameters
+learning_rate = 0.01
+epochs = 100
+hidden_neurons = 64
+
+# Create neural network
+model_diabetes = Sequential()
+model_diabetes.add(Dense(hidden_neurons, input_dim=X.shape[1], activation='relu'))  # Hidden layer
+model_diabetes.add(Dense(1))  # Output layer for regression
+
+# Compile model
+optimizer = Adam(learning_rate=learning_rate)
+model_diabetes.compile(optimizer=optimizer, loss='mean_squared_error', metrics=['mean_absolute_error'])
+
+# Train model
+model_diabetes.fit(X_train, y_train, epochs=epochs, verbose=1)
+
+# Evaluate model
+loss, mae = model_diabetes.evaluate(X_test, y_test, verbose=0)
+print("\nDiabetes Dataset MAE:", mae)
+
+# Predict first 5 samples
+preds = model_diabetes.predict(X_test[:5])
+print("\nFirst 5 Predictions:\n", preds)
+print("Actual values:\n", y_test[:5])
+
+
+
+g)  Design and implement a sequential, dense neural network that acts as a classifier for 
+the heart dataset provided in class, tune your neural network with different 
+hyperparameter values for learning rate, architecture and epochs. 
+
+
+#g)Design and implement a sequential, dense neural network that acts as a classifier for the heart dataset provided in class, tune your neural network with different hyperparameter values for learning rate, architecture and epochs. Heart Dataset Classifier (Updated with Input layer)
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Input
+
+# Load dataset
+df = pd.read_csv(r"D:\Machine larning\heart.csv", encoding='latin1')  # Use your CSV path
+
+# Split features and target
+X = df.iloc[:, :-1].values  # All columns except last
+y = df.iloc[:, -1].values   # Last column is target
+
+# Split into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Build neural network
+model = Sequential()
+model.add(Input(shape=(X.shape[1],)))  # Input layer
+model.add(Dense(16, activation='relu'))  # Hidden layer
+model.add(Dense(1, activation='sigmoid'))  # Output layer (binary classification)
+
+# Compile model
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+# Train model
+model.fit(X_train, y_train, epochs=50, verbose=1)
+
+# Evaluate model
+loss, acc = model.evaluate(X_test, y_test, verbose=0)
+print("Accuracy:", acc)
+
+# Predict first 5 samples from test set
+preds = model.predict(X_test[:5])
+print("Predictions (rounded):", preds.round())
+print("Actual:", y_test[:5])
+
+
+
+#a)Implement the Find-S algorithm on the data sets provided to you to induce hypotheses from training data
+# a) Find-S Algorithm Implementation
+
+import pandas as pd
+
+# Sample training dataset
+data = pd.DataFrame([
+    ['Sunny', 'Warm', 'Normal', 'Strong', 'Warm', 'Same', 'Yes'],
+    ['Sunny', 'Warm', 'High', 'Strong', 'Warm', 'Same', 'Yes'],
+    ['Rainy', 'Cold', 'High', 'Strong', 'Warm', 'Change', 'No'],
+    ['Sunny', 'Warm', 'High', 'Strong', 'Cool', 'Change', 'Yes']
+], columns=['Sky', 'AirTemp', 'Humidity', 'Wind', 'Water', 'Forecast', 'EnjoySport'])
+
+# Initialize the most specific hypothesis
+hypothesis = ['ϕ'] * (len(data.columns) - 1)
+
+# Iterate through the dataset
+for i in range(len(data)):
+    if data.iloc[i, -1] == 'Yes':  # Only positive examples
+        for j in range(len(hypothesis)):
+            if hypothesis[j] == 'ϕ':
+                hypothesis[j] = data.iloc[i, j]
+            elif hypothesis[j] != data.iloc[i, j]:
+                hypothesis[j] = '?'
+
+print("Final Hypothesis using Find-S Algorithm:")
+print(hypothesis)
+
+
+
+# b) Candidate Elimination Algorithm Implementation (Warning-Free)
+
+import pandas as pd
+
+# Dataset
+data = pd.DataFrame([
+    ['Sunny', 'Warm', 'Normal', 'Strong', 'Warm', 'Same', 'Yes'],
+    ['Sunny', 'Warm', 'High', 'Strong', 'Warm', 'Same', 'Yes'],
+    ['Rainy', 'Cold', 'High', 'Strong', 'Warm', 'Change', 'No'],
+    ['Sunny', 'Warm', 'High', 'Strong', 'Cool', 'Change', 'Yes']
+], columns=['Sky', 'AirTemp', 'Humidity', 'Wind', 'Water', 'Forecast', 'EnjoySport'])
+
+# Initialize S (Specific) and G (General)
+S = ['ϕ'] * (len(data.columns) - 1)
+G = [['?'] * (len(data.columns) - 1)]
+
+# Iterate through dataset
+for i in range(len(data)):
+    instance = data.iloc[i, :-1]
+    if data.iloc[i, -1] == 'Yes':  # Positive example
+        for j in range(len(S)):
+            if S[j] == 'ϕ':
+                S[j] = instance.iloc[j]
+            elif S[j] != instance.iloc[j]:
+                S[j] = '?'
+        G = [g for g in G if all(s == '?' or g[k] == '?' or s == g[k] for k, s in enumerate(S))]
+    else:  # Negative example
+        G.append(['?' if S[k] == '?' else instance.iloc[k] for k in range(len(S))])
+
+print("Final Specific Hypothesis (S):", S)
+print("Final General Hypotheses (G):", G)
+
+
+
+#1.Design and implement the naïve Bayes classifier using the data set available at /kaggle/input/adult-dataset/adult.csv that has 15 attributes, segregate the dataset into categorical and numerical variables. Income is the target variable.
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder, RobustScaler
+from sklearn.compose import ColumnTransformer
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+# a) Load dataset
+data = pd.read_csv(r"D:\Machine larning\adult_simple.csv")
+
+# b) Replace ? with NaN
+data.replace('?', pd.NA, inplace=True)
+
+# c) Check missing values
+print("Missing values in each column:")
+print(data.isnull().sum())
+
+# d) Fill missing categorical values with most frequent value
+for col in data.select_dtypes(include='object'):
+    data[col].fillna(data[col].mode()[0], inplace=True)
+
+# e) Check numerical data
+print("Numerical columns summary:")
+print(data.describe())
+
+# f) Features and target
+X = data.drop('income', axis=1)
+y = data['income']
+
+# g) Split data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# h) One hot encoding for categorical features
+cat_cols = X.select_dtypes(include='object').columns
+ct = ColumnTransformer(transformers=[('encoder', OneHotEncoder(handle_unknown='ignore'), cat_cols)], remainder='passthrough')
+X_train = ct.fit_transform(X_train)
+X_test = ct.transform(X_test)
+
+# i) Feature scaling
+scaler = RobustScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# j) Train model
+model = GaussianNB()
+model.fit(X_train, y_train)
+
+# k) Predict
+y_pred = model.predict(X_test)
+
+# l) Accuracy
+print("Model Accuracy:", accuracy_score(y_test, y_pred))
+
+# m) Check for overfitting
+print("Train Accuracy:", model.score(X_train, y_train))
+print("Test Accuracy:", model.score(X_test, y_test))
+
+# n) Null accuracy
+null_acc = y_test.value_counts().max() / len(y_test)
+print("Null Accuracy:", null_acc)
+
+# o) Confusion matrix
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+# p) Classification report
+print("Classification Report:")
+print(classification_report(y_test, y_pred))
+
+
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import accuracy_score
+
+# Load dataset
+data = pd.read_csv("D:\\Machine larning\\text_dataset.csv")
+
+# Features and target
+X = data["text"]
+y = data["label"]
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
+
+# Convert text to word count features
+vectorizer = CountVectorizer()
+X_train_counts = vectorizer.fit_transform(X_train)
+X_test_counts = vectorizer.transform(X_test)
+
+# Create and train model
+model = MultinomialNB()
+model.fit(X_train_counts, y_train)
+
+# Predict
+y_pred = model.predict(X_test_counts)
+
+# Accuracy
+print("Accuracy:", accuracy_score(y_test, y_pred))
+
+# Example test
+test_text = ["The new movie broke all box office records"]
+test_text_counts = vectorizer.transform(test_text)
+print("Predicted category:", model.predict(test_text_counts)[0])
+
+
+import pandas as pd
+
+df = pd.read_csv(r"D:\Machine larning\text_dataset.csv")
+print(df.head())       # show first 5 rows
+print(df.columns)      # show all column names
+
+
+
+
+# Assignment 6 - Question 3
+# Implement the NB Optimal Classifier
+
+# Import libraries
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+# Load dataset
+data = pd.read_csv(r"D:\Machine larning\nb_optimal.csv")
+
+# Check columns
+print(data.head())
+print(data.columns)
+
+# Features and target
+X = data['text']
+y = data['label']
+
+# Convert text to vectors
+vectorizer = CountVectorizer()
+X_vec = vectorizer.fit_transform(X)
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(X_vec, y, test_size=0.3, random_state=1)
+
+# Train model
+model = MultinomialNB()
+model.fit(X_train, y_train)
+
+# Predict
+y_pred = model.predict(X_test)
+
+# Evaluate
+print("\nAccuracy:", accuracy_score(y_test, y_pred))
+print("\nConfusion Matrix:\n", confusion_matrix(y_test, y_pred))
+print("\nClassification Report:\n", classification_report(y_test, y_pred, zero_division=1))
+
+
+
+
+# Assignment 6 - Question 3
+# Implement the NB Optimal Classifier
+
+# Import libraries
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+# Load dataset
+data = pd.read_csv(r"D:\Machine larning\nb_optimal.csv")
+
+# Check columns
+print(data.head())
+print(data.columns)
+
+# Features and target
+X = data['text']
+y = data['label']
+
+# Convert text to vectors
+vectorizer = CountVectorizer()
+X_vec = vectorizer.fit_transform(X)
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(X_vec, y, test_size=0.3, random_state=1)
+
+# Train model
+model = MultinomialNB()
+model.fit(X_train, y_train)
+
+# Predict
+y_pred = model.predict(X_test)
+
+# Evaluate
+print("\nAccuracy:", accuracy_score(y_test, y_pred))
+print("\nConfusion Matrix:\n", confusion_matrix(y_test, y_pred))
+print("\nClassification Report:\n", classification_report(y_test, y_pred, zero_division=1))
+
+
+
+# Random Forest on Mental Health Data
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+
+# Load data
+data = pd.read_csv("D:/Machine larning/mental_health.csv")
+
+# Features and target
+X = data.drop('Mental_Health', axis=1)
+y = data['Mental_Health']
+
+# Convert categorical data to numeric
+X = pd.get_dummies(X)
+y = pd.factorize(y)[0]
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train Random Forest model
+model = RandomForestClassifier(random_state=42)
+model.fit(X_train, y_train)
+
+# Predict and check accuracy
+y_pred = model.predict(X_test)
+print("Accuracy:", accuracy_score(y_test, y_pred))
+
+
+
+
+#3.Implement Random Forest algorithm on customers' default payments data set. Given a set of features, predict the probability of a customer defaulting on a loan. The target variable is "default payment" (Yes=1; No=1)
+#(download from here https://archive.ics.uci.edu/dataset/350/default+of+credit+card+clients?utm_source=ibm_developer&utm_content=in_content_link&utm_id=tutorials_awb-random-forest-predict-credit-defaults).pip install openpyxl
+
+
+# a) Import libraries
+import pandas as pd
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.utils import resample
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# b) Load dataset
+data = pd.read_excel(r"D:\Machine larning\default_of_credit_card_clients.xlsx")
+
+# c) No 'ID' column
+print("Columns:", data.columns)
+
+# d) Check missing data
+print("\nMissing values:\n", data.isnull().sum())
+print("\nUnique values in EDUCATION:", data['EDUCATION'].unique())
+print("Unique values in MARRIAGE:", data['MARRIAGE'].unique())
+
+# Filter valid EDUCATION and MARRIAGE values
+data = data[(data['EDUCATION'].isin([1, 2, 3])) & (data['MARRIAGE'].isin([1, 2, 3]))]
+
+# e) Check balance
+sns.countplot(x='default payment next month', data=data)
+plt.title('Target Distribution')
+plt.show()
+
+# f) Down sample safely
+default_1 = data[data['default payment next month'] == 1]
+default_0 = data[data['default payment next month'] == 0]
+
+n_samples = min(len(default_1), len(default_0))  # smallest group size
+default_1_down = resample(default_1, replace=True, n_samples=n_samples, random_state=42)
+default_0_down = resample(default_0, replace=True, n_samples=n_samples, random_state=42)
+data_down = pd.concat([default_1_down, default_0_down])
+
+# g) Encode
+X = data_down.drop('default payment next month', axis=1).copy()
+y = data_down['default payment next month']
+X = pd.get_dummies(X, drop_first=True)
+
+# h) Split data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# i) Train model
+rf = RandomForestClassifier(random_state=42)
+rf.fit(X_train, y_train)
+y_pred = rf.predict(X_test)
+print("\nAccuracy:", accuracy_score(y_test, y_pred))
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
+
+# j) Hyperparameter tuning
+params = {'n_estimators':[50,100], 'max_depth':[5,10,None]}
+grid = GridSearchCV(rf, params, cv=2, error_score='raise')
+grid.fit(X_train, y_train)
+print("\nBest Parameters:", grid.best_params_)
+best_rf = grid.best_estimator_
+y_pred_best = best_rf.predict(X_test)
+print("Accuracy after tuning:", accuracy_score(y_test, y_pred_best))
+print("Confusion Matrix after tuning:\n", confusion_matrix(y_test, y_pred_best))
+
+
+
+import pandas as pd
+
+data = pd.read_excel(r"D:\Machine larning\default_of_credit_card_clients.xlsx")
+print(data.columns)
+
+
+
+#1.Predict Sugar of Diabetic Patient given BMI and Age using k-NN, assume k = 3
+import pandas as pd
+from sklearn.neighbors import KNeighborsClassifier
+
+# Training data
+data1 = pd.DataFrame({
+    'BMI':[33.6,26.6,23.4,43.1,35.3,35.9,36.7,25.7,23.3,31],
+    'Age':[50,30,40,67,23,67,45,46,29,56],
+    'Sugar':[1,0,0,1,1,1,1,0,0,1]
+})
+
+X1 = data1[['BMI','Age']]
+y1 = data1['Sugar']
+
+knn = KNeighborsClassifier(n_neighbors=3)
+knn.fit(X1, y1)
+
+# Prediction input with column names
+test_data = pd.DataFrame({'BMI':[30], 'Age':[40]})
+pred = knn.predict(test_data)
+print("Predicted Sugar for BMI=30, Age=40:", pred[0])
+
+
+
+
+import pandas as pd
+from sklearn.neighbors import KNeighborsClassifier
+
+# Dataset
+data = pd.DataFrame({
+    'Brightness':[40,50,60,10,70,60,25],
+    'Saturation':[20,50,90,25,70,10,80],
+    'Class':['Red','Blue','Blue','Red','Blue','Red','Blue']
+})
+
+# Features and labels
+X = data[['Brightness','Saturation']]
+y = data['Class']
+
+# Create kNN model (k=3)
+knn = KNeighborsClassifier(n_neighbors=3)
+knn.fit(X, y)
+
+# Predict for new sample
+test = pd.DataFrame({'Brightness':[20],'Saturation':[35]})
+pred = knn.predict(test)
+
+print("Predicted Class for Brightness=20, Saturation=35:", pred[0])
+
+
+#3
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+
+# Load dataset
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
+
+# Create and train k-NN model
+knn = KNeighborsClassifier(n_neighbors=3)
+knn.fit(X_train, y_train)
+
+# Predict
+y_pred = knn.predict(X_test)
+
+# Accuracy
+print("Accuracy:", accuracy_score(y_test, y_pred))
+
+
+
+
+
