@@ -1,0 +1,329 @@
+// Save this file as: DesignPatternsDemo.java
+package demo;
+import java.util.*;
+
+// -----------------------------------------------------------------------------
+// 1. Singleton Pattern – Thread-Safe LoggerService
+// -----------------------------------------------------------------------------
+class LoggerService {
+    private static volatile LoggerService instance;
+
+    private LoggerService() {}
+
+    public static LoggerService getInstance() {
+        if (instance == null) {
+            synchronized (LoggerService.class) {
+                if (instance == null) {
+                    instance = new LoggerService();
+                }
+            }
+        }
+        return instance;
+    }
+
+    public void log(String message) {
+        System.out.println("LOG: " + message);
+    }
+}
+
+
+// -----------------------------------------------------------------------------
+// 2. Open/Closed Principle — Shape hierarchy
+// -----------------------------------------------------------------------------
+abstract class Shape {
+    abstract double area();
+}
+
+class Circle extends Shape {
+    double r;
+    Circle(double r){this.r=r;}
+    double area(){return Math.PI*r*r;}
+}
+
+class Square extends Shape {
+    double s;
+    Square(double s){this.s=s;}
+    double area(){return s*s;}
+}
+
+class Triangle extends Shape {
+    double base, height;
+    Triangle(double b, double h){base=b;height=h;}
+    double area(){return 0.5*base*height;}
+}
+
+
+// -----------------------------------------------------------------------------
+// 3. Single Responsibility Principle
+// -----------------------------------------------------------------------------
+class Student {
+    String name;
+    List<Integer> marks;
+    Student(String name, List<Integer> marks){
+        this.name=name;this.marks=marks;
+    }
+}
+
+class GradeCalculator {
+    double calculateAverage(Student s){
+        return s.marks.stream().mapToInt(i->i).average().orElse(0);
+    }
+}
+
+class StudentRepository {
+    void save(Student s){
+        System.out.println("Saving Student " + s.name + " to local file (simulated).");
+    }
+}
+
+
+// -----------------------------------------------------------------------------
+// 4. Prototype Pattern
+// -----------------------------------------------------------------------------
+interface ShapePrototype {
+    ShapePrototype cloneShape();
+}
+
+class CirclePrototype implements ShapePrototype {
+    int radius;
+    CirclePrototype(int r){radius=r;}
+    public ShapePrototype cloneShape(){
+        return new CirclePrototype(this.radius);
+    }
+}
+
+class RectanglePrototype implements ShapePrototype {
+    int w,h;
+    RectanglePrototype(int w,int h){this.w=w;this.h=h;}
+    public ShapePrototype cloneShape(){
+        return new RectanglePrototype(this.w,this.h);
+    }
+}
+
+
+// -----------------------------------------------------------------------------
+// 5. Interface Segregation Principle
+// -----------------------------------------------------------------------------
+interface Workable { void work(); }
+interface Feedable { void eat(); }
+interface Restable { void sleep(); }
+interface Payable { void getPaid(); }
+
+class HumanWorker implements Workable, Feedable, Restable, Payable {
+    public void work(){System.out.println("Human working");}
+    public void eat(){System.out.println("Human eating");}
+    public void sleep(){System.out.println("Human sleeping");}
+    public void getPaid(){System.out.println("Human getting paid");}
+}
+
+class RobotWorker implements Workable, Payable {
+    public void work(){System.out.println("Robot working");}
+    public void getPaid(){System.out.println("Robot maintenance credit");}
+}
+
+
+// -----------------------------------------------------------------------------
+// 6. Abstract Factory Pattern
+// -----------------------------------------------------------------------------
+interface PhotoCapturer { void capturePhoto(); }
+interface VideoRecorder { void recordVideo(); }
+
+interface MobileCameraFactory {
+    PhotoCapturer getPhotoCapturer();
+    VideoRecorder getVideoRecorder();
+}
+
+class HighResolutionPhoto implements PhotoCapturer {
+    public void capturePhoto(){ System.out.println("Capturing high resolution photo"); }
+}
+
+class HighResolutionVideo implements VideoRecorder {
+    public void recordVideo(){ System.out.println("Recording high resolution video"); }
+}
+
+class StandardPhoto implements PhotoCapturer {
+    public void capturePhoto(){ System.out.println("Capturing standard resolution photo"); }
+}
+
+class StandardVideo implements VideoRecorder {
+    public void recordVideo(){ System.out.println("Recording standard resolution video"); }
+}
+
+class HighResolutionCameraFactory implements MobileCameraFactory {
+    public PhotoCapturer getPhotoCapturer(){return new HighResolutionPhoto();}
+    public VideoRecorder getVideoRecorder(){return new HighResolutionVideo();}
+}
+
+class StandardCameraFactory implements MobileCameraFactory {
+    public PhotoCapturer getPhotoCapturer(){return new StandardPhoto();}
+    public VideoRecorder getVideoRecorder(){return new StandardVideo();}
+}
+
+
+// -----------------------------------------------------------------------------
+// 7. Memento Pattern
+// -----------------------------------------------------------------------------
+class TextEditor {
+    private String text = "";
+    public void type(String newText){ text += newText; }
+    public String getText(){ return text; }
+
+    public EditorMemento save(){ return new EditorMemento(text); }
+    public void undo(EditorMemento m){ text = m.getState(); }
+}
+
+class EditorMemento {
+    private final String state;
+    public EditorMemento(String state){ this.state = state; }
+    public String getState(){ return state; }
+}
+
+class History {
+    Stack<EditorMemento> stack = new Stack<>();
+    public void save(TextEditor editor){ stack.push(editor.save()); }
+    public void undo(TextEditor editor){
+        if(!stack.isEmpty()) editor.undo(stack.pop());
+    }
+}
+
+
+// -----------------------------------------------------------------------------
+// 8. Strategy Pattern
+// -----------------------------------------------------------------------------
+interface PaymentStrategy { void pay(double amount); }
+
+class CreditCardPayment implements PaymentStrategy {
+    public void pay(double amount){ System.out.println("Paid " + amount + " via Credit Card"); }
+}
+
+class PayPalPayment implements PaymentStrategy {
+    public void pay(double amount){ System.out.println("Paid " + amount + " via PayPal"); }
+}
+
+class UpiPayment implements PaymentStrategy {
+    public void pay(double amount){ System.out.println("Paid " + amount + " via UPI"); }
+}
+
+class PaymentContext {
+    PaymentStrategy strategy;
+    void setPaymentStrategy(PaymentStrategy s){strategy=s;}
+    void checkout(double amount){strategy.pay(amount);}
+}
+
+
+// -----------------------------------------------------------------------------
+// 9. Liskov Substitution Principle Fix
+// -----------------------------------------------------------------------------
+abstract class Animal { abstract void move(); }
+
+class FlyingBird extends Animal { 
+    void move(){ System.out.println("Flying"); } 
+}
+
+class PenguinLSP extends Animal {
+    void move(){ System.out.println("Swimming on water / Walking"); }
+}
+
+
+// -----------------------------------------------------------------------------
+// 10. Proxy Pattern — Image Viewer
+// -----------------------------------------------------------------------------
+interface Image {
+    void display();
+}
+
+class RealImage implements Image {
+    String filename;
+    RealImage(String f){filename=f; loadFromDisk();}
+    void loadFromDisk(){ System.out.println("Loading " + filename); }
+    public void display(){ System.out.println("Displaying " + filename); }
+}
+
+class ProxyImage implements Image {
+    RealImage realImage;
+    String filename;
+    ProxyImage(String f){filename=f;}
+    public void display(){
+        if(realImage == null) realImage = new RealImage(filename);
+        realImage.display();
+    }
+}
+
+
+// -----------------------------------------------------------------------------
+// 11. Iterator Pattern — Menu
+// -----------------------------------------------------------------------------
+interface MenuIterator {
+    boolean hasNext();
+    String next();
+}
+
+class Menu implements MenuIterator {
+    List<String> items;
+    int index=0;
+    Menu(List<String> items){this.items=items;}
+    public boolean hasNext(){return index < items.size();}
+    public String next(){return items.get(index++);}
+}
+
+
+// -----------------------------------------------------------------------------
+// MAIN METHOD (Demonstration)
+// -----------------------------------------------------------------------------
+public class DesignPatternsDemo {
+    public static void main(String[] args) {
+
+        // Test Singleton
+        LoggerService.getInstance().log("Singleton works!");
+
+        // Test Shape
+        Shape s = new Circle(5);
+        System.out.println("Circle Area: " + s.area());
+
+        // Test SRP
+        Student st = new Student("Swati", Arrays.asList(80,90,70));
+        GradeCalculator gc = new GradeCalculator();
+        System.out.println("Average: " + gc.calculateAverage(st));
+        new StudentRepository().save(st);
+
+        // Test Prototype
+        ShapePrototype cp = new CirclePrototype(10);
+        ShapePrototype cp2 = cp.cloneShape();
+        System.out.println("Cloned Circle Prototype created");
+
+        // Test ISP
+        new HumanWorker().work();
+        new RobotWorker().work();
+
+        // Test Abstract Factory
+        MobileCameraFactory factory = new HighResolutionCameraFactory();
+        factory.getPhotoCapturer().capturePhoto();
+
+        // Test Memento
+        TextEditor editor = new TextEditor();
+        History h = new History();
+        editor.type("Hello ");
+        h.save(editor);
+        editor.type("World!");
+        h.undo(editor);
+        System.out.println("After undo: " + editor.getText());
+
+        // Test Strategy
+        PaymentContext pc = new PaymentContext();
+        pc.setPaymentStrategy(new UpiPayment());
+        pc.checkout(999);
+
+        // Test LSP
+        Animal penguin = new PenguinLSP();
+        penguin.move();
+
+        // Test Proxy
+        Image img = new ProxyImage("photo.png");
+        img.display();
+        img.display();
+
+        // Test Iterator
+        Menu menu = new Menu(Arrays.asList("Idli", "Dosa", "Poha"));
+        while(menu.hasNext()) System.out.println("Menu: " + menu.next());
+    }
+}
