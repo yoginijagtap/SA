@@ -1,0 +1,711 @@
+// ==============================================
+//  Design Patterns and SOLID Principle Examples
+
+//  File: DesignPatternsDemo.java
+// ==============================================
+
+import java.util.*;
+
+// =======================
+// 1. Singleton Pattern
+// =======================
+// Implement the Singleton Pattern to create a thread-safe LoggerService class. 
+// The class should have a private constructor and a public static method to get the single instance.
+
+class LoggerService {
+    private static volatile LoggerService instance;
+
+    private LoggerService() {}
+
+    public static LoggerService getInstance() {
+        if (instance == null) {
+            synchronized (LoggerService.class) {
+                if (instance == null) {
+                    instance = new LoggerService();
+                }
+            }
+        }
+        return instance;
+    }
+
+    public void log(String message) {
+        System.out.println("Log: " + message);
+    }
+}
+
+// =======================
+// 2. Open/Closed Principle (OCP)
+// =======================
+// Refactor a shape area calculation logic to adhere to OCP.
+
+abstract class Shape {
+    abstract double calculateArea();
+}
+
+class Circle extends Shape {
+    double radius;
+    Circle(double radius) { this.radius = radius; }
+    double calculateArea() { return Math.PI * radius * radius; }
+}
+
+class Square extends Shape {
+    double side;
+    Square(double side) { this.side = side; }
+    double calculateArea() { return side * side; }
+}
+
+class Triangle extends Shape {
+    double base, height;
+    Triangle(double base, double height) { this.base = base; this.height = height; }
+    double calculateArea() { return 0.5 * base * height; }
+}
+
+// =======================
+// 3. Single Responsibility Principle (SRP)
+// =======================
+// Refactor a monolithic Student class into three classes: Student, GradeCalculator, and StudentRepository.
+
+class Student {
+    String name;
+    List<Integer> marks;
+
+    Student(String name, List<Integer> marks) {
+        this.name = name;
+        this.marks = marks;
+    }
+}
+
+class GradeCalculator {
+    double calculateAverage(Student s) {
+        return s.marks.stream().mapToInt(Integer::intValue).average().orElse(0);
+    }
+
+    String calculateGrade(Student s) {
+        double avg = calculateAverage(s);
+        if (avg >= 75) return "A";
+        if (avg >= 50) return "B";
+        return "C";
+    }
+}
+
+class StudentRepository {
+    void save(Student s) {
+        System.out.println("Student " + s.name + " saved to file (simulated).");
+    }
+}
+
+// =======================
+// 4. Prototype Pattern
+// =======================
+// Implement the Prototype Pattern for deep cloning of objects.
+
+interface ShapePrototype extends Cloneable {
+    ShapePrototype clone();
+}
+
+class CirclePrototype implements ShapePrototype {
+    double radius;
+
+    CirclePrototype(double radius) { this.radius = radius; }
+
+    public ShapePrototype clone() {
+        return new CirclePrototype(radius);
+    }
+
+    public String toString() { return "Circle with radius " + radius; }
+}
+
+class RectanglePrototype implements ShapePrototype {
+    double width, height;
+
+    RectanglePrototype(double width, double height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    public ShapePrototype clone() {
+        return new RectanglePrototype(width, height);
+    }
+
+    public String toString() { return "Rectangle " + width + "x" + height; }
+}
+
+// =======================
+// 5. Interface Segregation Principle (ISP)
+// =======================
+// Break large Worker interface into smaller ones.
+
+interface Workable { void work(); }
+interface Feedable { void eat(); }
+interface Restable { void sleep(); }
+interface Payable { void getPaid(); }
+
+class HumanWorker implements Workable, Feedable, Restable, Payable {
+    public void work() { System.out.println("Human working"); }
+    public void eat() { System.out.println("Human eating"); }
+    public void sleep() { System.out.println("Human sleeping"); }
+    public void getPaid() { System.out.println("Human getting paid"); }
+}
+
+class RobotWorker implements Workable, Payable {
+    public void work() { System.out.println("Robot working"); }
+    public void getPaid() { System.out.println("Robot processing maintenance credits"); }
+}
+
+// =======================
+// 6. Abstract Factory Pattern
+// =======================
+// Mobile factory for creating related camera objects.
+
+interface PhotoCapturer { void capturePhoto(); }
+interface VideoRecorder { void recordVideo(); }
+
+class HighResPhoto implements PhotoCapturer {
+    public void capturePhoto() { System.out.println("Capturing high-resolution photo."); }
+}
+class StandardPhoto implements PhotoCapturer {
+    public void capturePhoto() { System.out.println("Capturing standard photo."); }
+}
+
+class HighResVideo implements VideoRecorder {
+    public void recordVideo() { System.out.println("Recording high-resolution video."); }
+}
+class StandardVideo implements VideoRecorder {
+    public void recordVideo() { System.out.println("Recording standard video."); }
+}
+
+interface MobileCameraFactory {
+    PhotoCapturer createPhotoCapturer();
+    VideoRecorder createVideoRecorder();
+}
+
+class HighResolutionCameraFactory implements MobileCameraFactory {
+    public PhotoCapturer createPhotoCapturer() { return new HighResPhoto(); }
+    public VideoRecorder createVideoRecorder() { return new HighResVideo(); }
+}
+
+class StandardCameraFactory implements MobileCameraFactory {
+    public PhotoCapturer createPhotoCapturer() { return new StandardPhoto(); }
+    public VideoRecorder createVideoRecorder() { return new StandardVideo(); }
+}
+
+// =======================
+// 7. Memento Pattern
+// =======================
+// Simple TextEditor with undo feature.
+
+class TextEditor {
+    private String text = "";
+
+    public void type(String newText) {
+        text += newText;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public EditorMemento save() {
+        return new EditorMemento(text);
+    }
+
+    public void restore(EditorMemento memento) {
+        text = memento.getSavedText();
+    }
+
+    static class EditorMemento {
+        private final String savedText;
+        public EditorMemento(String text) { this.savedText = text; }
+        public String getSavedText() { return savedText; }
+    }
+}
+
+class History {
+    private Stack<TextEditor.EditorMemento> history = new Stack<>();
+    public void save(TextEditor.EditorMemento memento) { history.push(memento); }
+    public TextEditor.EditorMemento undo() { return history.pop(); }
+}
+
+// =======================
+// 8. Strategy Pattern
+// =======================
+// Payment system with interchangeable payment methods.
+
+interface PaymentStrategy {
+    void pay(double amount);
+}
+
+class CreditCardPayment implements PaymentStrategy {
+    public void pay(double amount) { System.out.println("Paid " + amount + " using Credit Card."); }
+}
+
+class PayPalPayment implements PaymentStrategy {
+    public void pay(double amount) { System.out.println("Paid " + amount + " using PayPal."); }
+}
+
+class UpiPayment implements PaymentStrategy {
+    public void pay(double amount) { System.out.println("Paid " + amount + " using UPI."); }
+}
+
+class PaymentContext {
+    private PaymentStrategy strategy;
+    public void setStrategy(PaymentStrategy strategy) { this.strategy = strategy; }
+    public void executePayment(double amount) { strategy.pay(amount); }
+}
+
+// =======================
+// 9. Liskov Substitution Principle (LSP)
+// =======================
+// Refactor Bird/Penguin to adhere to LSP.
+
+interface Flyable {
+    void fly();
+}
+
+class Bird implements Flyable {
+    public void fly() { System.out.println("Bird is flying."); }
+}
+
+class Penguin {
+    public void swim() { System.out.println("Penguin is swimming."); }
+}
+
+// =======================
+// 10. Proxy Pattern
+// =======================
+// Manage image loading efficiently.
+
+interface Image {
+    void display();
+}
+
+class RealImage implements Image {
+    private String filename;
+
+    RealImage(String filename) {
+        this.filename = filename;
+        loadFromDisk();
+    }
+
+    private void loadFromDisk() {
+        System.out.println("Loading " + filename);
+    }
+
+    public void display() {
+        System.out.println("Displaying " + filename);
+    }
+}
+
+class ProxyImage implements Image {
+    private String filename;
+    private RealImage realImage;
+
+    ProxyImage(String filename) {
+        this.filename = filename;
+    }
+
+    public void display() {
+        if (realImage == null) {
+            realImage = new RealImage(filename);
+        }
+        realImage.display();
+    }
+}
+
+// =======================
+// 11. Iterator Pattern
+// =======================
+// Implement Iterator Pattern for Menu (Breakfast, Lunch, Dinner)
+
+interface IteratorMenu {
+    boolean hasNext();
+    String next();
+}
+
+interface Menu {
+    IteratorMenu createIterator();
+}
+
+class BreakfastMenu implements Menu {
+    private String[] items = {"Pancakes", "Omelet", "Toast"};
+
+    public IteratorMenu createIterator() {
+        return new BreakfastIterator(items);
+    }
+
+    class BreakfastIterator implements IteratorMenu {
+        int index = 0;
+        String[] items;
+        BreakfastIterator(String[] items) { this.items = items; }
+
+        public boolean hasNext() { return index < items.length; }
+        public String next() { return items[index++]; }
+    }
+}
+
+// =======================
+// MAIN PROGRAM
+// =======================
+
+public class DesignPatternsDemo {
+    public static void main(String[] args) {
+
+        System.out.println("---- 1. Singleton ----");
+        LoggerService.getInstance().log("Singleton works!");
+
+        System.out.println("\n---- 2. OCP ----");
+        List<Shape> shapes = List.of(new Circle(5), new Square(4), new Triangle(3, 6));
+        for (Shape s : shapes) System.out.println("Area: " + s.calculateArea());
+
+        System.out.println("\n---- 3. SRP ----");
+        Student s = new Student("Swati", Arrays.asList(80, 70, 90));
+        GradeCalculator gc = new GradeCalculator();
+        System.out.println("Grade: " + gc.calculateGrade(s));
+        new StudentRepository().save(s);
+
+        System.out.println("\n---- 4. Prototype ----");
+        ShapePrototype c1 = new CirclePrototype(5);
+        ShapePrototype c2 = c1.clone();
+        System.out.println(c2);
+
+        System.out.println("\n---- 5. ISP ----");
+        new HumanWorker().work();
+        new RobotWorker().work();
+
+        System.out.println("\n---- 6. Abstract Factory ----");
+        MobileCameraFactory factory = new HighResolutionCameraFactory();
+        factory.createPhotoCapturer().capturePhoto();
+        factory.createVideoRecorder().recordVideo();
+
+        System.out.println("\n---- 7. Memento ----");
+        TextEditor editor = new TextEditor();
+        History history = new History();
+        editor.type("Hello ");
+        history.save(editor.save());
+        editor.type("World!");
+        System.out.println("Current Text: " + editor.getText());
+        editor.restore(history.undo());
+        System.out.println("After Undo: " + editor.getText());
+
+        System.out.println("\n---- 8. Strategy ----");
+        PaymentContext pc = new PaymentContext();
+        pc.setStrategy(new UpiPayment());
+        pc.executePayment(250.0);
+
+        System.out.println("\n---- 9. LSP ----");
+        Bird bird = new Bird(); bird.fly();
+        Penguin penguin = new Penguin(); penguin.swim();
+
+        System.out.println("\n---- 10. Proxy ----");
+        Image img = new ProxyImage("photo.png");
+        img.display();
+        img.display(); // second time loads from cache
+
+        System.out.println("\n---- 11. Iterator ----");
+        BreakfastMenu menu = new BreakfastMenu();
+        IteratorMenu it = menu.createIterator();
+        while (it.hasNext()) System.out.println(it.next());
+    }
+}
+
+
+
+
+
+--------------------------------
+// ==========================
+// 3. SOLID Refactoring - OrderProcessor
+// ==========================
+interface Validator {
+    boolean validate(String order);
+}
+class SimpleValidator implements Validator {
+    public boolean validate(String order) {
+        return order != null && !order.isEmpty();
+    }
+}
+
+interface PriceCalculator {
+    double calculatePrice(String order);
+}
+class SimplePriceCalculator implements PriceCalculator {
+    public double calculatePrice(String order) {
+        return 100.0; // fixed price for demo
+    }
+}
+
+interface OrderRepository {
+    void save(String order);
+}
+class FileOrderRepository implements OrderRepository {
+    public void save(String order) {
+        System.out.println("Order saved to file: " + order);
+    }
+}
+
+interface OrderTypeHandler {
+    void handle(String order);
+}
+class OnlineOrderHandler implements OrderTypeHandler {
+    public void handle(String order) {
+        System.out.println("Online order handled: " + order);
+    }
+}
+
+class OrderProcessor {
+    private Validator validator;
+    private PriceCalculator calculator;
+    private OrderRepository repository;
+    private OrderTypeHandler handler;
+
+    public OrderProcessor(Validator v, PriceCalculator c, OrderRepository r, OrderTypeHandler h) {
+        this.validator = v;
+        this.calculator = c;
+        this.repository = r;
+        this.handler = h;
+    }
+
+    public void process(String order) {
+        if (validator.validate(order)) {
+            double price = calculator.calculatePrice(order);
+            System.out.println("Order Price: " + price);
+            repository.save(order);
+            handler.handle(order);
+        } else {
+            System.out.println("Invalid order!");
+        }
+    }
+}
+
+
+// ==========================
+// 4. Bridge Pattern - Vehicle & Manufacture
+// ==========================
+interface Workshop {
+    void work();
+}
+class Produce implements Workshop {
+    public void work() {
+        System.out.println("Producing...");
+    }
+}
+class Assemble implements Workshop {
+    public void work() {
+        System.out.println("Assembling...");
+    }
+}
+
+abstract class Vehicle {
+    protected Workshop w1;
+    protected Workshop w2;
+    protected Vehicle(Workshop w1, Workshop w2) {
+        this.w1 = w1; this.w2 = w2;
+    }
+    abstract void manufacture();
+}
+class Car extends Vehicle {
+    public Car(Workshop w1, Workshop w2) { super(w1, w2); }
+    void manufacture() {
+        System.out.print("Car ");
+        w1.work(); w2.work();
+    }
+}
+class Bike extends Vehicle {
+    public Bike(Workshop w1, Workshop w2) { super(w1, w2); }
+    void manufacture() {
+        System.out.print("Bike ");
+        w1.work(); w2.work();
+    }
+}
+
+
+// ==========================
+// 6. Decorator Pattern - Coffee
+// ==========================
+interface Coffee {
+    String getDescription();
+    double getCost();
+}
+class BasicCoffee implements Coffee {
+    public String getDescription() { return "Basic Coffee"; }
+    public double getCost() { return 50; }
+}
+class CoffeeDecorator implements Coffee {
+    protected Coffee coffee;
+    CoffeeDecorator(Coffee coffee) { this.coffee = coffee; }
+    public String getDescription() { return coffee.getDescription(); }
+    public double getCost() { return coffee.getCost(); }
+}
+class MilkDecorator extends CoffeeDecorator {
+    MilkDecorator(Coffee coffee) { super(coffee); }
+    public String getDescription() { return super.getDescription() + ", Milk"; }
+    public double getCost() { return super.getCost() + 10; }
+}
+class SugarDecorator extends CoffeeDecorator {
+    SugarDecorator(Coffee coffee) { super(coffee); }
+    public String getDescription() { return super.getDescription() + ", Sugar"; }
+    public double getCost() { return super.getCost() + 5; }
+}
+
+
+// ==========================
+// 7. Factory Method - PizzaStore
+// ==========================
+abstract class Pizza {
+    abstract void prepare();
+}
+class CheesePizza extends Pizza {
+    void prepare() { System.out.println("Preparing Cheese Pizza"); }
+}
+class VeggiePizza extends Pizza {
+    void prepare() { System.out.println("Preparing Veggie Pizza"); }
+}
+abstract class PizzaStore {
+    abstract Pizza createPizza(String type);
+    void orderPizza(String type) {
+        Pizza pizza = createPizza(type);
+        pizza.prepare();
+    }
+}
+class NYPizzaStore extends PizzaStore {
+    Pizza createPizza(String type) {
+        if (type.equals("cheese")) return new CheesePizza();
+        else return new VeggiePizza();
+    }
+}
+
+
+// ==========================
+// 8. Observer Pattern - Weather Station
+// ==========================
+import java.util.*;
+interface Observer {
+    void update(int temp);
+}
+interface Subject {
+    void register(Observer o);
+    void notifyAllObservers();
+}
+class WeatherStation implements Subject {
+    private List<Observer> observers = new ArrayList<>();
+    private int temperature;
+    public void register(Observer o) { observers.add(o); }
+    public void setTemperature(int temp) {
+        this.temperature = temp;
+        notifyAllObservers();
+    }
+    public void notifyAllObservers() {
+        for (Observer o : observers) o.update(temperature);
+    }
+}
+class Display implements Observer {
+    public void update(int temp) {
+        System.out.println("Temperature updated: " + temp + "°C");
+    }
+}
+
+
+// ==========================
+// 11. Command Pattern - Remote Control
+// ==========================
+interface Command {
+    void execute();
+}
+class Light {
+    void on() { System.out.println("Light ON"); }
+    void off() { System.out.println("Light OFF"); }
+}
+class Fan {
+    void start() { System.out.println("Fan Started"); }
+}
+class TurnOnLightCommand implements Command {
+    Light light; TurnOnLightCommand(Light l){ light=l; }
+    public void execute(){ light.on(); }
+}
+class StartFanCommand implements Command {
+    Fan fan; StartFanCommand(Fan f){ fan=f; }
+    public void execute(){ fan.start(); }
+}
+class RemoteControl {
+    Command command;
+    void setCommand(Command c){ command=c; }
+    void pressButton(){ command.execute(); }
+}
+
+
+// ==========================
+// 12. Adapter Pattern - Media Player
+// ==========================
+interface MediaPlayer {
+    void play(String type, String filename);
+}
+interface AdvancedMediaPlayer {
+    void playVlc(String filename);
+    void playMp4(String filename);
+}
+class VlcPlayer implements AdvancedMediaPlayer {
+    public void playVlc(String filename) { System.out.println("Playing VLC: " + filename); }
+    public void playMp4(String filename) {}
+}
+class Mp4Player implements AdvancedMediaPlayer {
+    public void playVlc(String filename) {}
+    public void playMp4(String filename) { System.out.println("Playing MP4: " + filename); }
+}
+class MediaAdapter implements MediaPlayer {
+    AdvancedMediaPlayer advancedPlayer;
+    MediaAdapter(String type) {
+        if (type.equalsIgnoreCase("vlc")) advancedPlayer = new VlcPlayer();
+        else if (type.equalsIgnoreCase("mp4")) advancedPlayer = new Mp4Player();
+    }
+    public void play(String type, String filename) {
+        if (type.equalsIgnoreCase("vlc")) advancedPlayer.playVlc(filename);
+        else if (type.equalsIgnoreCase("mp4")) advancedPlayer.playMp4(filename);
+    }
+}
+class AudioPlayer implements MediaPlayer {
+    public void play(String type, String filename) {
+        if (type.equalsIgnoreCase("mp3")) System.out.println("Playing MP3: " + filename);
+        else new MediaAdapter(type).play(type, filename);
+    }
+}
+
+
+// ==========================
+// MAIN METHOD (Run all examples)
+// ==========================
+public class Main {
+    public static void main(String[] args) {
+        // 3. SOLID OrderProcessor
+        OrderProcessor op = new OrderProcessor(
+            new SimpleValidator(), new SimplePriceCalculator(),
+            new FileOrderRepository(), new OnlineOrderHandler());
+        op.process("Order#101");
+
+        // 4. Bridge
+        Vehicle car = new Car(new Produce(), new Assemble());
+        car.manufacture();
+
+        // 6. Decorator
+        Coffee coffee = new MilkDecorator(new SugarDecorator(new BasicCoffee()));
+        System.out.println(coffee.getDescription() + " costs " + coffee.getCost());
+
+        // 7. Factory
+        PizzaStore store = new NYPizzaStore();
+        store.orderPizza("cheese");
+
+        // 8. Observer
+        WeatherStation ws = new WeatherStation();
+        ws.register(new Display());
+        ws.setTemperature(30);
+
+        // 11. Command
+        RemoteControl remote = new RemoteControl();
+        remote.setCommand(new TurnOnLightCommand(new Light()));
+        remote.pressButton();
+
+        // 12. Adapter
+        MediaPlayer player = new AudioPlayer();
+        player.play("mp4", "video.mp4");
+    }
+}
+
