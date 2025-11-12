@@ -1,0 +1,368 @@
+// Save as: DesignPatternsDemo.java
+// This file demonstrates SOLID principles and multiple design patterns with a single main() method.
+
+import java.util.*;
+
+// =====================================================
+// ORDER PROCESSING SYSTEM FOLLOWING SOLID PRINCIPLES
+// =====================================================
+
+// Represents a customer order
+class Order {
+    public final String id;
+    public final String type;
+    public final List<Integer> itemPrices;
+    public Order(String id, String type, List<Integer> itemPrices) {
+        this.id = id; 
+        this.type = type; 
+        this.itemPrices = itemPrices;
+    }
+}
+
+// Validates orders (SRP: Single Responsibility)
+interface Validator { 
+    boolean validate(Order order); 
+}
+
+class BasicOrderValidator implements Validator {
+    public boolean validate(Order order) {
+        return order != null && order.itemPrices != null && !order.itemPrices.isEmpty();
+    }
+}
+
+// Calculates price of an order (Open-Closed Principle)
+interface PriceCalculator { 
+    double calculateTotal(Order order); 
+}
+
+// Simple price calculator with no discounts
+class SimpleSumPriceCalculator implements PriceCalculator {
+    public double calculateTotal(Order order) {
+        return order.itemPrices.stream().mapToDouble(Integer::doubleValue).sum();
+    }
+}
+
+// Discount calculator that applies a configurable discount rate
+class DiscountPriceCalculator implements PriceCalculator {
+    private final double discountRate;
+    public DiscountPriceCalculator(double rate) { this.discountRate = rate; }
+    public double calculateTotal(Order order) {
+        double sum = order.itemPrices.stream().mapToDouble(Integer::doubleValue).sum();
+        return sum * (1 - discountRate);
+    }
+}
+
+// Handles saving orders (DIP: Uses abstraction instead of concrete DB details)
+interface OrderRepository { 
+    void save(Order order, double computedTotal); 
+}
+
+class InMemoryOrderRepository implements OrderRepository {
+    private final Map<String, Double> storage = new HashMap<>();
+    public void save(Order order, double computedTotal) {
+        storage.put(order.id, computedTotal);
+        System.out.println("[Saved] Order " + order.id + " Total: " + computedTotal);
+    }
+}
+
+// Handles different order types (Online, In-Store, Pre-order) - Open for extension
+interface OrderHandler {
+    void handle(Order order, PriceCalculator calculator, OrderRepository repo);
+}
+
+class OnlineOrderHandler implements OrderHandler {
+    public void handle(Order order, PriceCalculator calculator, OrderRepository repo) {
+        double total = calculator.calculateTotal(order);
+        System.out.println("Processed Online Order. Total: " + total);
+        repo.save(order, total);
+    }
+}
+
+class InStoreOrderHandler implements OrderHandler {
+    public void handle(Order order, PriceCalculator calculator, OrderRepository repo) {
+        double total = calculator.calculateTotal(order) + 5; // store service fee
+        System.out.println("Processed In-Store Order. Total: " + total);
+        repo.save(order, total);
+    }
+}
+
+class PreorderHandler implements OrderHandler {
+    public void handle(Order order, PriceCalculator calculator, OrderRepository repo) {
+        double deposit = calculator.calculateTotal(order) * 0.25; // only deposit taken
+        System.out.println("Processed Preorder. Deposit Due: " + deposit);
+        repo.save(order, deposit);
+    }
+}
+
+// Factory class to choose appropriate handler based on order type
+class OrderHandlerFactory {
+    public static OrderHandler getHandler(String type) {
+        switch(type) {
+            case "ONLINE": return new OnlineOrderHandler();
+            case "IN_STORE": return new InStoreOrderHandler();
+            case "PREORDER": return new PreorderHandler();
+        }
+        return new OnlineOrderHandler();
+    }
+}
+
+// High-level order processor combining validation, price calculation, and saving
+class OrderProcessor {
+    private final Validator validator;
+    private final PriceCalculator calc;
+    private final OrderRepository repo;
+
+    public OrderProcessor(Validator v, PriceCalculator c, OrderRepository r) {
+        this.validator = v; 
+        this.calc = c; 
+        this.repo = r;
+    }
+
+    public void process(Order order) {
+        if (!validator.validate(order)) {
+            System.out.println("Order Validation Failed!");
+            return;
+        }
+        OrderHandler handler = OrderHandlerFactory.getHandler(order.type);
+        handler.handle(order, calc, repo);
+    }
+}
+
+// =====================================================
+// BRIDGE PATTERN (Separating abstraction from implementation)
+// =====================================================
+
+interface Manufacture {
+    void producePart(String part);
+    void assemblePart(String part);
+}
+
+// Two different manufacturing styles
+class ProduceManufacture implements Manufacture {
+    public void producePart(String part) { System.out.println("Producing: " + part); }
+    public void assemblePart(String part) { System.out.println("Assembling: " + part); }
+}
+
+class AssembleManufacture implements Manufacture {
+    public void producePart(String part) { System.out.println("Manufacturing Part: " + part); }
+    public void assemblePart(String part) { System.out.println("Completing Assembly: " + part); }
+}
+
+// Abstract vehicle connected to manufacturer
+abstract class Vehicle {
+    protected Manufacture manufacture;
+    protected Vehicle(Manufacture m) { this.manufacture = m; }
+    abstract void build();
+}
+
+class Car extends Vehicle {
+    public Car(Manufacture m) { super(m); }
+    public void build() {
+        manufacture.producePart("Car Frame");
+        manufacture.assemblePart("Car Frame");
+        System.out.println("Car Built.\n");
+    }
+}
+
+class Bike extends Vehicle {
+    public Bike(Manufacture m) { super(m); }
+    public void build() {
+        manufacture.producePart("Bike Body");
+        manufacture.assemblePart("Bike Body");
+        System.out.println("Bike Built.\n");
+    }
+}
+
+// =====================================================
+// DECORATOR PATTERN (Adding features dynamically)
+// =====================================================
+
+interface Coffee { 
+    String getDescription(); 
+    double cost(); 
+}
+
+class BasicCoffee implements Coffee {
+    public String getDescription() { return "Basic Coffee"; }
+    public double cost() { return 5; }
+}
+
+abstract class CoffeeDecorator implements Coffee {
+    protected Coffee coffee;
+    public CoffeeDecorator(Coffee c) { this.coffee = c; }
+    public String getDescription() { return coffee.getDescription(); }
+    public double cost() { return coffee.cost(); }
+}
+
+class MilkDecorator extends CoffeeDecorator {
+    public MilkDecorator(Coffee c) { super(c); }
+    public String getDescription() { return coffee.getDescription() + ", Milk"; }
+    public double cost() { return coffee.cost() + 1; }
+}
+
+class SugarDecorator extends CoffeeDecorator {
+    public SugarDecorator(Coffee c) { super(c); }
+    public String getDescription() { return coffee.getDescription() + ", Sugar"; }
+    public double cost() { return coffee.cost() + 0.5; }
+}
+
+// =====================================================
+// FACTORY METHOD PATTERN (Creating objects via subclasses)
+// =====================================================
+
+abstract class Pizza { 
+    String name;
+    void prepare(){ System.out.println("Preparing " + name); }
+    void bake(){ System.out.println("Baking " + name); }
+    void cut(){ System.out.println("Cutting " + name); }
+}
+
+class NYCheesePizza extends Pizza { NYCheesePizza(){ name="NY Cheese Pizza"; } }
+class NYVegPizza extends Pizza { NYVegPizza(){ name="NY Veg Pizza"; } }
+class ChicagoCheesePizza extends Pizza { ChicagoCheesePizza(){ name="Chicago Cheese Pizza"; } }
+
+abstract class PizzaStore {
+    public Pizza orderPizza(String type){
+        Pizza p = createPizza(type);
+        if(p == null) { System.out.println("Unknown Pizza Type"); return null;}
+        p.prepare(); p.bake(); p.cut(); return p;
+    }
+    protected abstract Pizza createPizza(String type);
+}
+
+class NYPizzaStore extends PizzaStore {
+    protected Pizza createPizza(String type){
+        if(type.equals("cheese")) return new NYCheesePizza();
+        if(type.equals("veg")) return new NYVegPizza();
+        return null;
+    }
+}
+
+class ChicagoPizzaStore extends PizzaStore {
+    protected Pizza createPizza(String type){
+        if(type.equals("cheese")) return new ChicagoCheesePizza();
+        return null;
+    }
+}
+
+// =====================================================
+// OBSERVER PATTERN (Automatic updates on change)
+// =====================================================
+
+interface Observer { 
+    void update(double t, double h); 
+}
+
+interface Subject { 
+    void registerObserver(Observer o); 
+    void notifyObservers(); 
+}
+
+class WeatherStation implements Subject {
+    private List<Observer> obs = new ArrayList<>();
+    private double temp, humid;
+
+    public void registerObserver(Observer o){ obs.add(o); }
+    public void notifyObservers(){ for(Observer o:obs) o.update(temp, humid);}
+    public void setMeasurements(double t,double h){ temp=t; humid=h; notifyObservers(); }
+}
+
+class CurrentDisplay implements Observer {
+    public void update(double t,double h){ System.out.println("Weather Now: Temp="+t+" Humidity="+h); }
+}
+
+// =====================================================
+// COMMAND PATTERN (Encapsulating actions)
+// =====================================================
+
+interface Command { void execute(); void undo(); }
+
+class Light {
+    void on(){ System.out.println("Light Turned ON"); }
+    void off(){ System.out.println("Light Turned OFF"); }
+}
+
+class TurnOnLightCommand implements Command {
+    Light l; 
+    TurnOnLightCommand(Light l){ this.l=l; }
+    public void execute(){ l.on(); }
+    public void undo(){ l.off(); }
+}
+
+class RemoteControl {
+    Stack<Command> history = new Stack<>();
+    void press(Command c){ c.execute(); history.push(c); }
+    void undo(){ if(!history.isEmpty()) history.pop().undo(); }
+}
+
+// =====================================================
+// ADAPTER PATTERN (Making incompatible classes work together)
+// =====================================================
+
+interface MediaPlayer { 
+    void play(String type, String filename); 
+}
+
+class AdvancedMediaPlayer {
+    void playMp4(String f){ System.out.println("Playing MP4: "+f); }
+}
+
+class MediaAdapter implements MediaPlayer {
+    AdvancedMediaPlayer adv = new AdvancedMediaPlayer();
+    public void play(String type,String file){
+        if(type.equals("mp4")) adv.playMp4(file);
+    }
+}
+
+class AudioPlayer implements MediaPlayer {
+    public void play(String type,String file){
+        if(type.equals("mp3")) System.out.println("Playing MP3: "+file);
+        else new MediaAdapter().play(type,file);
+    }
+}
+
+// =====================================================
+// MAIN PROGRAM (RUNS DEMONSTRATION)
+// =====================================================
+
+public class DesignPatternsDemo {
+    public static void main(String[] args) {
+
+        System.out.println("\n--- SOLID Order Processing ---");
+        OrderProcessor op = new OrderProcessor(
+                new BasicOrderValidator(),
+                new DiscountPriceCalculator(0.1),
+                new InMemoryOrderRepository()
+        );
+        op.process(new Order("O1","ONLINE",Arrays.asList(100,200,50)));
+
+        System.out.println("\n--- Bridge Pattern ---");
+        new Car(new ProduceManufacture()).build();
+        new Bike(new AssembleManufacture()).build();
+
+        System.out.println("\n--- Decorator Pattern ---");
+        Coffee coffee = new SugarDecorator(new MilkDecorator(new BasicCoffee()));
+        System.out.println(coffee.getDescription()+" | Cost = "+coffee.cost());
+
+        System.out.println("\n--- Factory Method Pattern ---");
+        new NYPizzaStore().orderPizza("cheese");
+        new ChicagoPizzaStore().orderPizza("cheese");
+
+        System.out.println("\n--- Observer Pattern ---");
+        WeatherStation station = new WeatherStation();
+        station.registerObserver(new CurrentDisplay());
+        station.setMeasurements(25, 60);
+
+        System.out.println("\n--- Command Pattern ---");
+        RemoteControl rc = new RemoteControl();
+        rc.press(new TurnOnLightCommand(new Light()));
+        rc.undo();
+
+        System.out.println("\n--- Adapter Pattern ---");
+        MediaPlayer player = new AudioPlayer();
+        player.play("mp3","song.mp3");
+        player.play("mp4","movie.mp4");
+
+        System.out.println("\n=== PROGRAM EXECUTION COMPLETE ===");
+    }
+}
