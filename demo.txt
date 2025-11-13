@@ -157,15 +157,27 @@ model_verion
 
 
 
-foor 3 ter 3:copy comand 
+
+ 3 ter 3:copy comand 
 mlfloe name and vesion must same
  mlflow models sever -m "mpodels:wine que//" -- port 5002 --evn-manager local
 
 
-te 4:source bin act
+ter 4:source bin act
 test and delpoy last line 
 print("predicted wine quality:{prediction['predictions'][0][0]:.2}")
 
+
+ter5:Build Production Containe
+ter6:
+curl -X POST http://localhost:5003/invocations \
+  -H "Content-Type: application/json" \
+  -d '{
+    "dataframe_split": {
+      "columns": ["fixed acidity","volatile acidity","citric acid","residual sugar","chlorides","free sulfur dioxide","total sulfur dioxide","density","pH","sulphates","alcohol"],
+      "data": [[7.0, 0.27, 0.36, 20.7, 0.045, 45, 170, 1.001, 3.0, 0.45, 8.8]]
+    }
+  }'
 
 
 ansible:
