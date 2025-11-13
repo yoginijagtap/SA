@@ -137,7 +137,34 @@ jupyter notebook
 pip install mlflow[extras] hyperopt tensorflow scikit-learn pandas numpy
  Prepare Your Data
 
+hyoeermaparater:
+open ducum
+copy paste https:localhost:5000
+click on hyprt-->
+thre dot and line click on it ie col 
+metrices :val_rsme
+parame: lernirate
+      moment
+ sort : val_rsme
+swich chart view  2 times do
+ paralell coorud=dinates  
+param: learing, mon
+mretice va_rsme' add chart
 
+column right side val rsme min time selct model register
+model_verion
+
+
+
+
+foor 3 ter 3:copy comand 
+mlfloe name and vesion must same
+ mlflow models sever -m "mpodels:wine que//" -- port 5002 --evn-manager local
+
+
+te 4:source bin act
+test and delpoy last line 
+print("predicted wine quality:{prediction['predictions'][0][0]:.2}")
 
 
 
