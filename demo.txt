@@ -136,3 +136,49 @@ jupyter notebook
 
 pip install mlflow[extras] hyperopt tensorflow scikit-learn pandas numpy
  Prepare Your Data
+
+
+
+
+
+ansible:
+ ceate instance with ubuntu : and redhat with amazon Linux create folder for mkdir ansible 
+cd ansible 
+chmod 400 .pem file
+create 3 instace 2 unbun nd one red had open
+ansible.cfg--> path
+public ip in inventory edit
+
+ ansible -m ping all
+ansible-playbook playbooks/install_java.yml
+ ansible-playbook playbooks/install_nginx.yml
+ ansible-playbook playbooks/add_users.yml
+
+
+
+
+i ins ubuntu ip 
+severngnix
+inventory ip and pem filr path
+ ansible -i inventory all -m ping
+ansible-playbook -i inventory playbooks/deploy_nginx.yml
+open ip of 
+
+
+i2 isnatce ---
+foldr create ansile and inventory
+ ansible -m ping all
+
+copy paste command 
+
+
+
+time ser
+git clone 
+invent edit
+
+ansil edit
+ ansible -m ping all
+ansible-playbook playbooks/time
+
+
