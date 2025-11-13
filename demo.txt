@@ -220,4 +220,9 @@ ansil edit
  ansible -m ping all
 ansible-playbook playbooks/time
 
-
+k8s
+custo tcp 3000
+ssh 22
+postgress 5432
+cuts tc 8080
+cut tcp6443
